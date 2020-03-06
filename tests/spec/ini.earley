@@ -1,0 +1,12 @@
+file :- SOI, line*, EOI.
+*line :- (section ; property)?, NEWLINE.
+
+section :- "[", name, "]".
+property :- name, "=", value.
+
+@name :- char+.
+@value :- char*.
+
+char :- ASCII_ALPHANUMERIC ; "." ; "_" ; "/".
+
+WHITESPACE :- " ".

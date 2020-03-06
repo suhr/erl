@@ -1,0 +1,29 @@
+grammar = _{ SOI ~ rule* ~ EOI }
+
+rule = { rule_name ~ ":-" rule_expr ~ "." }
+rule_name = { ("*"| "@" | "$")? ~ name }
+rule_expr = { expr ~ split? }
+split = { "/" ~ expr }
+
+expr = _{ expr_1 ~ or? }
+expr_1 = _{ expr_2 ~ then? }
+expr_2 = _{ atom ~ mul? }
+
+atom = { encl | nt_name | string }
+encl = { "(" ~ expr ~ ")" }
+nt_name = { name ~ level? }
+level = { "~" ~ nat? }
+
+name = @{
+    (XID_START ~ XID_CONTINUE*)
+    | ("_" ~ XID_CONTINUE*)
+}
+nat = { ASCII_DIGIT+ }
+string = ${ "\"" ~ inner ~ "\"" }
+inner = @{ char* }
+char = {
+    !("\"" | "\\") ~ ANY
+    | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t")
+}
+
+WHITESPACE = _{ " " | NEWLINE | "\t" }

@@ -1,0 +1,21 @@
+*calc :- SOI, expr, EOI.
+expr :-
+    add ; sub
+    / mul ; div
+    / pow
+    / term.
+
+add :- expr~, "+", expr.
+sub :- expr~, "-", expr.
+mul :- expr~, "*", expr.
+div :- expr~, "/", expr.
+pow :- expr, "^", expr~.
+
+*term :- num ; encl.
+encl :- "(", expr~0, ")".
+
+@num :- int, (".", ASCII_DIGIT*)?, exp?.
+exp :- ("e" ; "E"), int.
+int :- ("+" ; "-")?, ASCII_DIGIT+.
+
+WHITESPACE :- " " ; "\t".
